@@ -2,6 +2,17 @@
 
 A web application developed for tracking corporate devices (phones, tablets, Apple TV, Android TV).
 
+![image](https://github.com/user-attachments/assets/c0346fb8-26ad-4583-bf2d-7076a212ea9f)
+
+![image](https://github.com/user-attachments/assets/8fc57a8d-1712-4efa-98be-b307a5322944)
+
+![image](https://github.com/user-attachments/assets/09e67555-94e2-4257-9ee6-edfe1f2d7250)
+
+![image](https://github.com/user-attachments/assets/75ca8cc0-1c6b-4a18-a4c9-b96bd76db6e8)
+
+![image](https://github.com/user-attachments/assets/bf803759-a199-40bc-8d18-29e9e3fe206c)
+
+
 ## Features
 
 - **User Management**
