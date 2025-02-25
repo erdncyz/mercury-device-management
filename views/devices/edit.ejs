@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Edit Device</h4>
+            </div>
+            <div class="card-body">
+                <% if (locals.error) { %>
+                    <div class="alert alert-danger"><%= error %></div>
+                <% } %>
+                <form action="/devices/<%= device.id %>" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Device Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<%= device.name %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Device Type</label>
+                        <select class="form-select" id="type" name="type" required>
+                            <option value="">Select Type</option>
+                            <option value="Phone" <%= device.type === 'Phone' ? 'selected' : '' %>>Phone</option>
+                            <option value="Tablet" <%= device.type === 'Tablet' ? 'selected' : '' %>>Tablet</option>
+                            <option value="Apple TV" <%= device.type === 'Apple TV' ? 'selected' : '' %>>Apple TV</option>
+                            <option value="Android TV" <%= device.type === 'Android TV' ? 'selected' : '' %>>Android TV</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="serialNumber" class="form-label">Serial Number</label>
+                        <input type="text" class="form-control" id="serialNumber" name="serialNumber" value="<%= device.serialNumber %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="assignedTo" class="form-label">Assigned To</label>
+                        <input type="text" class="form-control" id="assignedTo" name="assignedTo" value="<%= device.assignedTo || '' %>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"><%= device.notes || '' %></textarea>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="/devices" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

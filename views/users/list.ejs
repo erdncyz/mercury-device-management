@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>User Management</h1>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>ID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach(user => { %>
+                            <tr>
+                                <td>
+                                    <%= user.username %>
+                                    <% if (user.username === 'admin') { %>
+                                        <span class="badge bg-primary ms-2">Main Admin</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (user.isAdmin) { %>
+                                        <span class="badge bg-success">Admin</span>
+                                    <% } else { %>
+                                        <span class="badge bg-secondary">User</span>
+                                    <% } %>
+                                    <% if (!user.isActive) { %>
+                                        <span class="badge bg-warning ms-1">Pending</span>
+                                    <% } %>
+                                </td>
+                                <td><small class="text-muted"><%= user.id %></small></td>
+                                <td>
+                                    <% if (user.username !== 'admin') { %>
+                                        <div class="btn-group btn-group-sm">
+                                            <form action="/users/<%= user.id %>/toggle-admin" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-outline-primary">
+                                                    <%= user.isAdmin ? 'Remove Admin' : 'Make Admin' %>
+                                                </button>
+                                            </form>
+                                            <form action="/users/<%= user.id %>/toggle-active" method="POST" class="d-inline ms-2">
+                                                <button type="submit" class="btn btn-outline-warning">
+                                                    <%= user.isActive ? 'Deactivate' : 'Activate' %>
+                                                </button>
+                                            </form>
+                                            <form action="/users/<%= user.id %>/delete" method="POST" class="d-inline ms-2" 
+                                                  onsubmit="return confirmDelete('<%= user.username %>')">
+                                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(username) {
+    return Swal.fire({
+        title: 'Delete User',
+        text: `Are you sure you want to delete user "${username}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#4b5563',
+        confirmButtonText: 'Yes, Delete',
+        cancelButtonText: 'Cancel',
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdrop: 'rgba(0, 0, 0, 0.4)',
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-custom-title',
+            content: 'swal-custom-content',
+            confirmButton: 'swal-custom-confirm',
+            cancelButton: 'swal-custom-cancel'
+        }
+    }).then((result) => {
+        return result.isConfirmed;
+    });
+}
+</script> 

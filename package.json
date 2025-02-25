@@ -1,0 +1,37 @@
+{
+  "name": "mercury-device-management",
+  "version": "1.0.0",
+  "description": "Mercury Device Management - Corporate device tracking system",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "device",
+    "management",
+    "tracking",
+    "corporate",
+    "inventory"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erdncyz/mercury-device-management.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,0 +1,148 @@
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Devices</h1>
+            <% if (locals.user && user.isAdmin) { %>
+                <a href="/devices/add" class="btn btn-primary">Add New Device</a>
+            <% } %>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <input type="text" id="nameFilter" class="form-control" placeholder="Device Name">
+                    </div>
+                    <div class="col-md-2">
+                        <select id="typeFilter" class="form-select">
+                            <option value="">All Types</option>
+                            <option value="Phone">Phone</option>
+                            <option value="Tablet">Tablet</option>
+                            <option value="Apple TV">Apple TV</option>
+                            <option value="Android TV">Android TV</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="assignedToFilter" class="form-control" placeholder="Assigned To">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-secondary w-100" onclick="resetFilters()">Clear Filters</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Table -->
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="devicesTable">
+                    <thead>
+                        <tr>
+                            <th>Device Name</th>
+                            <th>Type</th>
+                            <th>Serial No</th>
+                            <th>Assigned To</th>
+                            <th>Assignment Date</th>
+                            <th>Notes</th>
+                            <% if (locals.user && user.isAdmin) { %>
+                                <th style="width: 150px">Actions</th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (devices.length === 0) { %>
+                            <tr>
+                                <td colspan="7" class="text-center">No devices found</td>
+                            </tr>
+                        <% } else { %>
+                            <% devices.forEach(device => { %>
+                                <tr>
+                                    <td><%= device.name %></td>
+                                    <td><%= device.type %></td>
+                                    <td><%= device.serialNumber %></td>
+                                    <td><%= device.assignedTo || '-' %></td>
+                                    <td><%= new Date(device.assignmentDate).toLocaleString('en-US') %></td>
+                                    <td><%= device.notes || '-' %></td>
+                                    <% if (locals.user && user.isAdmin) { %>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="/devices/<%= device.id %>/edit" class="btn btn-sm btn-primary">Edit</a>
+                                                <button type="button" class="btn btn-sm btn-danger ms-1" 
+                                                        onclick="confirmDelete('<%= device.id %>', '<%= device.name %>')">Delete</button>
+                                            </div>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function filterTable() {
+    const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
+    const typeFilter = document.getElementById('typeFilter').value.toLowerCase();
+    const assignedToFilter = document.getElementById('assignedToFilter').value.toLowerCase();
+    
+    const rows = document.querySelectorAll('#devicesTable tbody tr');
+    
+    rows.forEach(row => {
+        const name = row.cells[0].textContent.toLowerCase();
+        const type = row.cells[1].textContent.toLowerCase();
+        const assignedTo = row.cells[3].textContent.toLowerCase();
+        
+        const matchesName = name.includes(nameFilter);
+        const matchesType = !typeFilter || type === typeFilter;
+        const matchesAssignedTo = assignedTo.includes(assignedToFilter);
+        
+        row.style.display = (matchesName && matchesType && matchesAssignedTo) ? '' : 'none';
+    });
+}
+
+function resetFilters() {
+    document.getElementById('nameFilter').value = '';
+    document.getElementById('typeFilter').value = '';
+    document.getElementById('assignedToFilter').value = '';
+    filterTable();
+}
+
+// Input event listeners
+document.getElementById('nameFilter').addEventListener('input', filterTable);
+document.getElementById('typeFilter').addEventListener('change', filterTable);
+document.getElementById('assignedToFilter').addEventListener('input', filterTable);
+
+function confirmDelete(deviceId, deviceName) {
+    Swal.fire({
+        title: 'Delete Device',
+        text: `Are you sure you want to delete "${deviceName}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#4b5563',
+        confirmButtonText: 'Yes, Delete',
+        cancelButtonText: 'Cancel',
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdrop: 'rgba(0, 0, 0, 0.4)',
+        customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-custom-title',
+            content: 'swal-custom-content',
+            confirmButton: 'swal-custom-confirm',
+            cancelButton: 'swal-custom-cancel'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/devices/${deviceId}/delete`;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
+</script> 
