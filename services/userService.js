@@ -4,20 +4,6 @@ const bcrypt = require('bcryptjs');
 class UserService extends StorageService {
     constructor() {
         super('users');
-        this.initializeAdmin();
-    }
-
-    // Initialize admin user
-    async initializeAdmin() {
-        const users = this.getAll();
-        if (users.length === 0) {
-            this.create({
-                username: 'admin',
-                password: 'admin123',
-                isAdmin: true,
-                isActive: true // Admin otomatik aktif
-            });
-        }
     }
 
     // User login
@@ -46,7 +32,7 @@ class UserService extends StorageService {
         return this.create({
             ...userData,
             isAdmin: false,
-            isActive: false // Yeni kullanıcılar pasif başlar
+            isActive: false
         });
     }
 

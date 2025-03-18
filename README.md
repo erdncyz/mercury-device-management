@@ -26,6 +26,7 @@ A web application developed for tracking corporate devices (phones, tablets, App
   - Delete devices
   - View all devices
   - Assign/reassign devices
+  - Manage users
 
 - **User Features**
   - View device list
@@ -55,11 +56,11 @@ A web application developed for tracking corporate devices (phones, tablets, App
    npm install
    ```
 
-3. Default admin user:
+3. Create an admin user:
+   ```bash
+   npm run setup
    ```
-   Username: admin
-   Password: admin123
-   ```
+   This will prompt you to enter an admin username and password.
 
 4. Start the application:
    ```bash
@@ -71,6 +72,24 @@ A web application developed for tracking corporate devices (phones, tablets, App
    ```
 
 5. Visit `http://localhost:3000` in your browser to view the application.
+
+## User Management
+
+### Creating Admin Users
+You can create or update admin users using the setup script:
+```bash
+npm run setup
+```
+
+The script will:
+- Prompt you to enter a username and password
+- Create a new admin user with these credentials
+- If the username already exists, update the password and ensure admin rights
+
+### User Activation
+- New registered users are inactive by default
+- Admin users can activate new users through the User Management page
+- Only active users can log in to the system
 
 ## Data Storage
 
@@ -95,6 +114,7 @@ project/
 ├── routes/               # Route handlers
 │   ├── index.js
 │   ├── auth.js
+│   ├── users.js
 │   └── devices.js
 ├── views/                # EJS templates
 │   ├── layouts/
@@ -102,10 +122,14 @@ project/
 │   ├── auth/
 │   │   ├── login.ejs
 │   │   └── register.ejs
+│   ├── users/
+│   │   └── list.ejs
 │   └── devices/
 │       ├── list.ejs
 │       ├── add.ejs
 │       └── edit.ejs
+├── scripts/              # Utility scripts
+│   └── create-admin.js   # Admin creation script
 └── public/              # Static files
     ├── css/
     │   └── style.css
@@ -127,12 +151,19 @@ project/
 - `PUT /devices/:id` - Update device (admin only)
 - `DELETE /devices/:id` - Delete device (admin only)
 
+### Users
+- `GET /users` - List all users (admin only)
+- `POST /users/:id/toggle-admin` - Toggle admin rights (admin only)
+- `POST /users/:id/toggle-active` - Activate/deactivate user (admin only)
+- `POST /users/:id/delete` - Delete user (admin only)
+
 ## Security
 
 - User passwords are hashed with bcrypt
 - Session-based authentication
 - Admin-only routes protection
 - Input validation and sanitization
+- User activation system
 
 ## Data Persistence
 
